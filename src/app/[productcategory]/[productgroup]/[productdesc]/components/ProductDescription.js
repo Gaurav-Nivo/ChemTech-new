@@ -2,19 +2,27 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import TableProductDesc from './TableProductDesc'
 import PopUp from './Popup'
+import Link from 'next/link';
 
 function ProductDescription({ productId }) {
     const [productData, setProductData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [pCode , setPCode] = useState()
+    const [mainCat , setMainCat] = useState('')
+    const [subCat , setSubCat] = useState('')
     const imgPath = 'http://localhost/chemtech15-12/chemtech/uploads1/product/'
 
     useEffect(() => {
         axios.get(`http://localhost/chemtech15-12/chemtech/Api/local/productapi.php?id=${productId}`)
             .then((response) => {
+                console.log(response.data , "line 18")
                 setProductData(response.data);
                 const code = response.data.map(item=>item.p_code)
                 setPCode(code)
+                const m_cat = response.data.map(item=>item.name_mcat)
+                setMainCat(m_cat)
+                const s_cat = response.data.map(item=>item.sub_cname)
+                setSubCat(s_cat)
                 setLoading(false);
             })
             .catch((error) => {
@@ -32,6 +40,9 @@ function ProductDescription({ productId }) {
     }
     return (
         <>
+        <div className='container'>
+            <span><strong><Link href='/'>HOME </Link>/ {mainCat}  {subCat ? `/ ${subCat}` : ''}/ {pCode}</strong></span>
+        </div>
             <div className='mx-4 mb-2'>
                 <div className='row mt-4'>
                     <div className="col-md-12 col-sm-12  ">

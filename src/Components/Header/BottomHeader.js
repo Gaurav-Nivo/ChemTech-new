@@ -1,4 +1,6 @@
 "use client"
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
@@ -10,6 +12,13 @@ import { MdAccountCircle } from "react-icons/md";
 import { RiFileList3Line } from "react-icons/ri";
 
 function BottomHeader() {
+    const [mainCat , setMainCat] = useState([])
+    useEffect(()=>{
+        axios.get('http://localhost/chemtech15-12/chemtech/Api/local/mainapi.php')
+        .then((res)=>(
+            setMainCat(res.data)
+        ))
+    })
     return (
         <>
             <Navbar expand="lg" className="bottom-header-bg ">
@@ -17,14 +26,13 @@ function BottomHeader() {
                     <Navbar.Brand className='bottom-header-dropdown'>
                         <BiCategory className='bottom-header-dropdown-icon' />
                         <NavDropdown title="Product" id="dropdown-menu-align-responsive-2">
-                            <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action4">
-                                Another action
-                            </NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action5">
-                                Something else here
-                            </NavDropdown.Item>
+                           <ul style={{listStyle:'disc'}}>
+                           {
+                                mainCat.map((item)=>(
+                                    <NavDropdown.Item href={`/${item.id}`}><li><stong>{item.name_mcat}</stong></li></NavDropdown.Item>
+                                ))
+                            }
+                           </ul>
                         </NavDropdown>
 
                     </Navbar.Brand>
